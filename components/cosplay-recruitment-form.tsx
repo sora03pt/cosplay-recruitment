@@ -96,17 +96,23 @@ const recruitOptions = [
   { id: "assistant", label: "アシスタント" },
 ]
 
-// 注意事項のオプションを追加
+// 条件のオプションを追加
 const noteOptions = [
+  { id: "adults-only", label: "18歳以上の方" },
+  { id: "adults-only2", label: "20歳以上の方" },
+  { id: "onna", label: "女性の方" },
+  { id: "otoko", label: "男性の方" },
+  { id: "camera", label: "一眼レフ、ミラーレスカメラを所持してる方" },
   { id: "data-delivery", label: "データを1週間以内に送ってくれる方" },
   { id: "data-delivery2", label: "データを1ヶ月以内に送ってくれる方" },
   { id: "line", label: "LINEでやり取り可能な方" },
   { id: "dm", label: "DMでやり取り可能な方" },
   { id: "snsOK", label: "撮影データをSNSにあげてもいい方" },
-  { id: "transportation", label: "交通費はご自身で負担でできる方" },
-  { id: "cancel", label: "緊急な事態が発生した場合以外ではドタキャン、音信不通にならないかた" },
-  { id: "adults-only", label: "18歳以上" },
-  { id: "adults-only2", label: "20歳以上" },
+  { id: "transportation", label: "交通費はご自身で負担できる方" },
+  { id: "cancel", label: "緊急な事態が発生した場合以外ではドタキャンしない方" },
+  { id: "contact", label: "音信不通にならない方" },
+  { id: "pinto", label: "ピントが合わせられる方" },
+  { id: "sakuhin", label: "作品の知識がある方" },
 ]
 
 export function CosplayRecruitmentForm() {
@@ -154,24 +160,24 @@ export function CosplayRecruitmentForm() {
     // 日付をフォーマット
     const formattedDate = format(values.date, "yyyy年MM月dd日(E)", { locale: ja })
 
-    // 注意事項を整形
+    // 条件を整形
     let notesText = ""
 
-    // チェックボックスで選択された注意事項
+    // チェックボックスで選択された条件
     if (values.noteOptions && values.noteOptions.length > 0) {
       const selectedNotes = values.noteOptions
         .map((optionId) => {
           const option = noteOptions.find((opt) => opt.id === optionId)
-          return option ? option.label : ""
+          return option ? `・${option.label}` : ""
         })
         .filter(Boolean)
 
       notesText = selectedNotes.join("\n")
     }
 
-    // カスタム注意事項があれば追加
+    // カスタム条件があれば追加
     if (values.customNotes && values.customNotes.trim()) {
-      notesText += notesText ? `\n${values.customNotes}` : values.customNotes
+      notesText += notesText ? `\n・${values.customNotes}` : values.customNotes
     }
 
     // 募集文を生成
@@ -182,7 +188,7 @@ export function CosplayRecruitmentForm() {
 ■日程：${formattedDate}
 ■場所：${values.location}
 ■募集：${recruitTypesText}
-${notesText ? `■条件\n${'・' + notesText}` : ""}
+${notesText ? `■条件：\n${notesText}` : ""}
 
 興味のある方はお気軽にお問い合わせください`
 
@@ -221,7 +227,7 @@ ${notesText ? `■条件\n${'・' + notesText}` : ""}
                 <FormItem>
                   <FormLabel>キャラクター</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="例：竈門炭治郎、五条悟、オリジナル など" {...field} />
+                    <Textarea placeholder="例：炭治郎（募集中）、禰󠄀豆子（hogeさん）など" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -348,9 +354,9 @@ ${notesText ? `■条件\n${'・' + notesText}` : ""}
               render={() => (
                 <FormItem>
                   <div className="mb-4">
-                    <FormLabel>注意事項</FormLabel>
+                    <FormLabel>条件</FormLabel>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
+                  <div className="grid gap-2 mb-4">
                     {noteOptions.map((option) => (
                       <FormField
                         key={option.id}
@@ -381,9 +387,9 @@ ${notesText ? `■条件\n${'・' + notesText}` : ""}
                     name="customNotes"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>追加の注意事項</FormLabel>
+                        <FormLabel>追加の条件</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="その他の注意事項があれば入力してください" {...field} />
+                          <Textarea placeholder="その他の条件があれば入力してください" {...field} />
                         </FormControl>
                       </FormItem>
                     )}
