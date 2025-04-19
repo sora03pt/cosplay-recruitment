@@ -30,7 +30,8 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v1  # ← この行を修正
+
         with:
           path: out  # out フォルダをアップロード
           
