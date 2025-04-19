@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Next.js推奨バージョン
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -30,7 +30,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1  # ← この行を修正
+        uses: actions/upload-pages-artifact@v1  # ← これを使用
 
         with:
           path: out  # out フォルダをアップロード
