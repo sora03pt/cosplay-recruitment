@@ -24,7 +24,7 @@ const formSchema = z.object({
     message: "募集ジャンルを入力してください",
   }),
   character: z.string().min(1, {
-    message: "募集キャラを入力してください",
+    message: "キャラクターを入力してください",
   }),
   date: z.date({
     required_error: "日程を選択してください",
@@ -94,16 +94,19 @@ const recruitOptions = [
   { id: "cosplayer", label: "レイヤー" },
   { id: "photographer", label: "カメラマン" },
   { id: "assistant", label: "アシスタント" },
-  { id: "other", label: "その他" },
 ]
 
 // 注意事項のオプションを追加
 const noteOptions = [
-  { id: "data-delivery", label: "データは１週間以内に納品" },
-  { id: "just-wearing-ng", label: "着ただけNG" },
-  { id: "beginners-welcome", label: "初心者歓迎" },
-  { id: "photography-included", label: "撮影あり" },
+  { id: "data-delivery", label: "データを1週間以内に送ってくれる方" },
+  { id: "data-delivery2", label: "データを1ヶ月以内に送ってくれる方" },
+  { id: "line", label: "LINEでやり取り可能な方" },
+  { id: "dm", label: "DMでやり取り可能な方" },
+  { id: "snsOK", label: "撮影データをSNSにあげてもいい方" },
+  { id: "transportation", label: "交通費はご自身で負担でできる方" },
+  { id: "cancel", label: "緊急な事態が発生した場合以外ではドタキャン、音信不通にならないかた" },
   { id: "adults-only", label: "18歳以上" },
+  { id: "adults-only2", label: "20歳以上" },
 ]
 
 export function CosplayRecruitmentForm() {
@@ -175,13 +178,13 @@ export function CosplayRecruitmentForm() {
     const text = `【コスプレ合わせ募集】
 
 ■ジャンル：${values.genre}
-■募集キャラ：${values.character}
+■キャラクター：${values.character}
 ■日程：${formattedDate}
 ■場所：${values.location}
 ■募集：${recruitTypesText}
-${notesText ? `■注意事項：\n${notesText}` : ""}
+${notesText ? `■条件\n${'・' + notesText}` : ""}
 
-興味のある方はDMください！`
+興味のある方はお気軽にお問い合わせください`
 
     setGeneratedText(text)
   }
@@ -216,7 +219,7 @@ ${notesText ? `■注意事項：\n${notesText}` : ""}
               name="character"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>募集キャラ</FormLabel>
+                  <FormLabel>キャラクター</FormLabel>
                   <FormControl>
                     <Textarea placeholder="例：竈門炭治郎、五条悟、オリジナル など" {...field} />
                   </FormControl>
