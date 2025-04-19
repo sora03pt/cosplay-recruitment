@@ -1,2 +1,0 @@
-# cosplay-recruitment
-cosplay recruitment
