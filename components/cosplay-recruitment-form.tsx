@@ -25,6 +25,13 @@ const memberSchema = z.object({
   role: z.string().optional(),
 })
 
+// 撮影場所の選択肢
+const locationTypeOptions = [
+  { value: "private-studio", label: "貸切スタジオ" },
+  { value: "shared-studio", label: "シェアスタジオ" },
+  { value: "outdoor", label: "屋外" },
+]
+
 // バリデーションを解除したformSchema
 const formSchema = z.object({
   genre: z.string().optional(),
@@ -35,6 +42,8 @@ const formSchema = z.object({
   startTime: z.string().optional(),
   endTime: z.string().optional(),
   location: z.string().optional(),
+  locationType: z.string().optional(),
+  locationDetail: z.string().optional(),
   recruitTypes: z.array(z.string()).optional(),
   otherType: z.string().optional(),
   noteOptions: z.array(z.string()).optional(),
@@ -92,7 +101,6 @@ const prefectures = [
   "沖縄県",
 ]
 
-// メンバーを削除
 const recruitOptions = [
   { id: "cosplayer", label: "レイヤー" },
   { id: "photographer", label: "カメラマン" },
@@ -187,6 +195,9 @@ export function CosplayRecruitmentForm() {
       dateType: "specific",
       startTime: "",
       endTime: "",
+      location: "",
+      locationType: "",
+      locationDetail: "",
       recruitTypes: [],
       noteOptions: [],
       customNotes: "",
@@ -206,6 +217,7 @@ export function CosplayRecruitmentForm() {
 
   const watchRecruitTypes = form.watch("recruitTypes") || []
   const watchDateType = form.watch("dateType")
+  const watchLocationType = form.watch("locationType")
   const showOtherInput = watchRecruitTypes.includes("other")
   const showCharacterInput = watchRecruitTypes.includes("cosplayer")
 
@@ -253,7 +265,24 @@ export function CosplayRecruitmentForm() {
       dateText += ` ～${values.endTime}`
     }
 
-    // 条件を整形
+    // 都道府県を整形
+    const locationText = values.location || ""
+
+    // 撮影場所を整形
+    let locationTypeText = ""
+    if (values.locationType) {
+      const selectedLocationType = locationTypeOptions.find((option) => option.value === values.locationType)
+      if (selectedLocationType) {
+        locationTypeText = selectedLocationType.label
+
+        // 詳細情報があれば追加
+        if (values.locationDetail) {
+          locationTypeText += `（${values.locationDetail}）`
+        }
+      }
+    }
+
+    // 注意事項を整形
     let notesText = ""
 
     // チェックボックスで選択された条件
@@ -295,7 +324,8 @@ ${values.genre ? `■ジャンル：${values.genre}` : ""}
 ${recruitTypesText ? `■募集する人の属性：${recruitTypesText}` : ""}
 ${showCharacterInput && values.character ? `■募集キャラ：${values.character}` : ""}
 ${dateText ? `■日程：${dateText}` : ""}
-${values.location ? `■場所：${values.location}` : ""}
+${values.location ? `■都道府県：${values.location}` : ""}
+${locationTypeText ? `■撮影場所：${locationTypeText}` : ""}
 ${membersText ? `■メンバー：\n${membersText}` : ""}
 ${notesText ? `■条件：\n${notesText}` : ""}`
 
@@ -561,7 +591,7 @@ ${notesText ? `■条件：\n${notesText}` : ""}`
               name="location"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>場所</FormLabel>
+                  <FormLabel>都道府県</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -580,6 +610,47 @@ ${notesText ? `■条件：\n${notesText}` : ""}`
                 </FormItem>
               )}
             />
+
+            {/* 撮影場所の選択 */}
+            <FormField
+              control={form.control}
+              name="locationType"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>撮影場所</FormLabel>
+                  <FormControl>
+                    <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-col space-y-1">
+                      {locationTypeOptions.map((option) => (
+                        <FormItem key={option.value} className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value={option.value} />
+                          </FormControl>
+                          <FormLabel className="font-normal">{option.label}</FormLabel>
+                        </FormItem>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* 撮影場所の詳細情報 */}
+            {watchLocationType && (
+              <FormField
+                control={form.control}
+                name="locationDetail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>撮影場所の詳細</FormLabel>
+                    <FormControl>
+                      <Input placeholder="例：○○スタジオ、△△公園 など" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             {/* メンバーセクション */}
             <div>
