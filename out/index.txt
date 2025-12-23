@@ -11,4 +11,4 @@ c:I[6614,[],""]
 9:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
 6:null
 7:null
-b:[["$","title","0",{"children":"あわせ募集文章作成"}],["$","meta","1",{"name":"description","content":"コスプレのあわせ募集文章作成ツールです"}],["$","meta","2",{"name":"generator","content":"v0.dev"}]]
+b:[["$","title","0",{"children":"コスプレ撮影募集文章作成"}],["$","meta","1",{"name":"description","content":"コスプレ撮影募集文章作成ツールです"}],["$","meta","2",{"name":"generator","content":"v0.dev"}]]

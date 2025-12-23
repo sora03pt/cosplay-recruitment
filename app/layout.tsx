@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'あわせ募集文章作成',
-  description: 'コスプレのあわせ募集文章作成ツールです',
+  title: 'コスプレ撮影募集文章作成',
+  description: 'コスプレ撮影募集文章作成ツールです',
   generator: 'v0.dev',
 }
 
